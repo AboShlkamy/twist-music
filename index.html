@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>تويست ميوزك</title>
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --dark: #1e1a4b;
+            --light: rgba(255,255,255,0.96);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body, div, p, h1, h2, h3, h4, h5, h6, span, a, button, label, .alert, .balance-box, .dev-box, .dhikr-box, .notice-box {
+            -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
+        }
+        input, textarea, [contenteditable] {
+            -webkit-user-select: text; -moz-user-select: text; -ms-user-select: text; user-select: text;
+        }
+
+        body {
+            font-family: 'Cairo', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1e1a4b 0%, #2d2a5a 50%, #3a2f6a 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 12s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .bg-bubbles { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; }
+        .bubble {
+            position: absolute; bottom:-100px; background:rgba(255,255,255,0.15); border-radius:50%;
+            animation: rise linear infinite; backdrop-filter:blur(2px);
+        }
+        @keyframes rise {
+            0% { transform:translateY(0) scale(1); opacity:0.6; }
+            50% { opacity:0.3; }
+            100% { transform:translateY(-110vh) scale(0.3); opacity:0; }
+        }
+
+        .wrapper {
+            position: relative; z-index:2; width:100%; max-width:100%; height:100vh;
+            display: flex; flex-direction: column; justify-content: center;
+        }
+
+        #splash {
+            position:fixed; top:0; left:0; right:0; bottom:0;
+            background:linear-gradient(135deg, #1e1a4b, #2d2a5a);
+            display:flex; flex-direction:column; justify-content:center; align-items:center;
+            z-index:9999; transition: opacity 0.6s ease;
+        }
+        #splash .logo-circle {
+            width:130px; height:130px; border-radius:50%; background:white;
+            display:flex; align-items:center; justify-content:center;
+            box-shadow:0 0 40px rgba(102,126,234,0.8); margin-bottom:25px; overflow:hidden;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow:0 0 0 0 rgba(102,126,234,0.8); }
+            70% { box-shadow:0 0 0 25px rgba(102,126,234,0); }
+            100% { box-shadow:0 0 0 0 rgba(102,126,234,0); }
+        }
+        #splash .logo-circle img { width:100%; height:100%; object-fit:cover; }
+        #splash .splash-title { font-size:2.2rem; font-weight:bold; color:white; letter-spacing:3px; }
+
+        .card {
+            background: var(--light);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color:#333;
+            border-radius: 35px;
+            padding: 20px 15px;
+            box-shadow:0 25px 50px rgba(0,0,0,0.35);
+            border:1px solid rgba(255,255,255,0.3);
+            width:94%;
+            max-width:420px;
+            margin:0 auto;
+            display:flex; flex-direction:column;
+        }
+
+        .app-content { padding:10px 0; }
+
+        input, select {
+            width:100%; padding:14px 22px; margin:10px 0;
+            border-radius:50px; border:2px solid #e0e0e0; font-size:1rem;
+            background:white; transition:0.3s; outline:none; text-align:center;
+        }
+        input:focus, select:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(102,126,234,0.2); }
+
+        button {
+            width:100%; padding:14px; margin:8px 0; border-radius:50px; border:none;
+            font-weight:bold; font-size:1.1rem; color:white;
+            background:linear-gradient(135deg, var(--primary), var(--secondary));
+            box-shadow:0 6px 20px rgba(102,126,234,0.4); transition:0.2s; cursor:pointer;
+        }
+        button:active { transform:scale(0.96); }
+        .btn-danger { background:linear-gradient(135deg, #dc3545, #c82333); box-shadow:0 6px 20px rgba(220,53,69,0.4); }
+        .btn-success { background:linear-gradient(135deg, #11998e, #38ef7d); box-shadow:0 6px 20px rgba(17,153,142,0.4); }
+        .btn-outline {
+            background:transparent; border:2px solid var(--primary); color:var(--primary); box-shadow:none;
+        }
+
+        .alert {
+            border-radius:25px; padding:12px 18px; margin:10px 0; font-weight:bold; text-align:center;
+        }
+        .alert-danger { background:#f8d7da; color:#721c24; }
+        .alert-success { background:#d4edda; color:#155724; }
+
+        .balance-box {
+            background:linear-gradient(135deg, #f5f7fa, #e9ecef);
+            border-radius:25px; padding:18px; font-size:1.4rem; font-weight:bold;
+            color:#333; margin:15px 0; text-align:center;
+            box-shadow:0 4px 15px rgba(0,0,0,0.08);
+        }
+        .balance-box span { color:var(--primary); font-size:2rem; }
+
+        .timer-display {
+            font-size:1.2rem; background:rgba(102,126,234,0.1); border-radius:30px;
+            padding:8px 15px; margin:10px 0; display:inline-block;
+        }
+
+        .notice-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 20px;
+            padding: 12px 16px;
+            margin: 15px 0;
+            color: #856404;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .dev-footer {
+            margin-top:15px; display:flex; flex-direction:column; gap:8px; text-align:center;
+        }
+        .dev-box {
+            display:block; background:linear-gradient(135deg, #f5f7fa, #e9ecef);
+            padding:10px 15px; border-radius:25px; color:#333; font-weight:bold;
+            text-decoration:none; transition:0.2s; border:1px solid #ddd;
+        }
+        .dev-box:hover { background:var(--primary); color:white; border-color:var(--primary); }
+
+        .dhikr-box {
+            margin-top:8px; padding:10px 18px;
+            background:linear-gradient(135deg, #fef9e7, #fdebd0);
+            border:1px solid #f9e79f; border-radius:25px;
+            color:#b7950b; font-weight:bold; font-size:0.95rem;
+        }
+
+        /* شاشة تحميل عند إنجاز المهام أو السحب */
+        .loading-overlay {
+            position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6);
+            display:flex; justify-content:center; align-items:center; z-index:200;
+        }
+        .loading-box {
+            background:white; border-radius:30px; padding:25px; text-align:center;
+            font-size:1.1rem; font-weight:bold; color:#333;
+        }
+        .spinner {
+            width:40px; height:40px; border:4px solid #ddd; border-top-color:var(--primary);
+            border-radius:50%; animation: spin 0.8s linear infinite; margin:0 auto 10px;
+        }
+        @keyframes spin { to { transform:rotate(360deg); } }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="bg-bubbles" id="bubblesContainer"></div>
+
+    <!-- سبلاش -->
+    <div id="splash">
+        <div class="logo-circle">
+            <img src="https://h.top4top.io/p_37755j3n00.png" alt="شعار">
+        </div>
+        <div class="splash-title">تويست ميوزك</div>
+    </div>
+
+    <!-- المحتوى الأساسي -->
+    <div class="wrapper hidden" id="mainWrapper">
+        <div class="card">
+            <div class="app-content" id="app"></div>
+            <div class="dev-footer">
+                <a href="https://t.me/abo_shlkamy" target="_blank" class="dev-box">👨‍💻 المطور</a>
+                <a href="https://t.me/mabowaged_eg" target="_blank" class="dev-box">👥 تيم محمد عبواجد</a>
+                <div class="dhikr-box">لا تنسى ذكر الله ♥</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // فقاعات
+        (function(){
+            const c=document.getElementById('bubblesContainer');
+            for(let i=0;i<30;i++){
+                const b=document.createElement('div'); b.className='bubble';
+                const s=Math.random()*70+20;
+                b.style.width=s+'px'; b.style.height=s+'px'; b.style.left=Math.random()*100+'%';
+                b.style.animationDuration=Math.random()*8+6+'s'; b.style.animationDelay=Math.random()*10+'s';
+                c.appendChild(b);
+            }
+        })();
+
+        const API_BASE='https://api.twistmena.com/music', MAX_OTP=3;
+        let state={ step:'phone', phone:'', token:'', balance:0, otpTime:null, otpAttempts:0 };
+
+        function getHeaders(){
+            const ua=[
+                "Dart/3.7 (dart:io)","Dart/3.8 (dart:io)",
+                "Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.6045.163 Mobile Safari/537.36"
+            ];
+            return {
+                "user-agent":ua[Math.floor(Math.random()*ua.length)],
+                "app_version":"10.10.45","appversion":"10.10.45","channel":"mobileapp",
+                "content-type":"application/json","platform":"android","accept":"application/json",
+                "accept-language":"ar","host":"api.twistmena.com",
+                "device_id":"AP3A.240905.015."+Math.floor(Math.random()*900+100)
+            };
+        }
+
+        async function apiReq(url,method='GET',body=null,extra={}){
+            const headers={...getHeaders(),...extra};
+            if(body) body=JSON.stringify(body);
+            try{
+                const r=await fetch(API_BASE+url,{method,headers,body});
+                const d=await r.json(); return {code:r.status,body:d};
+            }catch(e){ return {code:0,body:{message:'خطأ في الاتصال'}}; }
+        }
+
+        function render(){
+            const app=document.getElementById('app'); app.innerHTML='';
+            if(state.step==='phone'){
+                app.innerHTML=`
+                    <input type="tel" id="phone" placeholder="مثال: 01012345678" inputmode="numeric">
+                    <button onclick="sendOtp()">📱 إرسال رمز التحقق</button>
+                `;
+            }else if(state.step==='verify'){
+                const rem=state.otpTime?Math.max(0,30-Math.floor((Date.now()-state.otpTime)/1000)):0;
+                app.innerHTML=`
+                    <div style="font-size:1.1rem; margin-bottom:8px;">تم إرسال الكود إلى <b>${state.phone}</b></div>
+                    <div class="timer-display">⏳ الوقت المتبقي: <span id="timer">${rem}</span> ثانية</div>
+                    <input type="text" id="code" placeholder="أدخل رمز التحقق">
+                    <button onclick="verifyOtp()">🔐 تحقق</button>
+                    <button onclick="resendOtp()" class="btn-success">📬 إعادة الإرسال</button>
+                    <button onclick="goToPhone()" class="btn-outline">🔙 تغيير الرقم</button>
+                `;
+                if(rem>0){
+                    const t=document.getElementById('timer');
+                    const iv=setInterval(()=>{
+                        const now=Math.max(0,30-Math.floor((Date.now()-state.otpTime)/1000));
+                        if(t) t.textContent=now;
+                        if(now<=0) clearInterval(iv);
+                    },1000);
+                }
+            }else if(state.step==='dashboard'){
+                app.innerHTML=`
+                    <div class="balance-box">💰 رصيدك الحالي: <span id="balanceSpan">${state.balance}</span> كوينز</div>
+                    <div class="notice-box">
+                        ⚠️ تنويه ليك 2000 وحده فقط علي مدار الشهر.... <br>
+                        لو خطك غير اتصالات مش هينفع تبدل وحدات... <br>
+                        لو خطك كان ف اي شركه وحولت لاتصالات م هيوصلك وحدات...
+                    </div>
+                    <button onclick="completeTasks()">📋 إنجاز جميع المهام</button>
+                    <select id="package" style="margin-top:15px;">
+                        <option value="">اختر الباقة للاستبدال</option>
+                        <option value="50">50 وحدة (100 كوينز)</option>
+                        <option value="100">100 وحدة (200 كوينز)</option>
+                        <option value="150">150 وحدة (300 كوينز)</option>
+                        <option value="300">300 وحدة (600 كوينز)</option>
+                        <option value="500">500 وحدة (1000 كوينز)</option>
+                        <option value="1000">1000 وحدة (2000 كوينز)</option>
+                    </select>
+                    <button onclick="redeemUnits()" class="btn-success">🔄 تبديل الوحدات</button>
+                    <button onclick="logout()" class="btn-danger">🚪 تسجيل خروج</button>
+                `;
+            }
+        }
+
+        function updateBalance(newBalance){
+            state.balance = newBalance;
+            const span = document.getElementById('balanceSpan');
+            if(span) span.textContent = newBalance;
+        }
+
+        function showAlert(msg,type='danger'){
+            const d=document.createElement('div'); d.className=`alert alert-${type}`; d.textContent=msg;
+            document.getElementById('app').prepend(d); setTimeout(()=>d.remove(),4000);
+        }
+
+        function showLoading(text){
+            const overlay = document.createElement('div'); overlay.className='loading-overlay'; overlay.id='loadingOverlay';
+            overlay.innerHTML = `<div class="loading-box"><div class="spinner"></div>${text}</div>`;
+            document.body.appendChild(overlay);
+        }
+
+        function hideLoading(){
+            const overlay = document.getElementById('loadingOverlay');
+            if(overlay) overlay.remove();
+        }
+
+        function valPhone(p){ return /^01\d{9}$/.test(p)?'2'+p: /^201\d{9}$/.test(p)?p:null; }
+
+        async function sendOtp(){
+            const p=document.getElementById('phone').value.trim();
+            if(!p) return showAlert('أدخل رقم الهاتف');
+            const f=valPhone(p); if(!f) return showAlert('رقم غير صالح');
+            showLoading('⏳ جاري إرسال رمز التحقق...');
+            const r=await apiReq('/Dlogin/sendCode','POST',{dial:f});
+            hideLoading();
+            if(r.code===200){
+                state.phone=f; state.step='verify'; state.otpTime=Date.now(); state.otpAttempts=0;
+                showAlert('✅ تم إرسال الكود','success'); render();
+            }else showAlert('❌ فشل الإرسال: '+(r.body.message||'Forbidden'));
+        }
+
+        async function resendOtp(){
+            showLoading('⏳ جاري إعادة الإرسال...');
+            const r=await apiReq('/Dlogin/sendCode','POST',{dial:state.phone});
+            hideLoading();
+            if(r.code===200){ state.otpTime=Date.now(); state.otpAttempts=0; showAlert('✅ أعيد الإرسال','success'); render(); }
+            else showAlert('❌ فشل إعادة الإرسال');
+        }
+
+        async function verifyOtp(){
+            const code=document.getElementById('code').value.trim();
+            if(!code) return showAlert('أدخل الكود');
+            if(state.otpTime && Date.now()-state.otpTime>30000) return showAlert('انتهت صلاحية الكود');
+            state.otpAttempts++;
+            if(state.otpAttempts>MAX_OTP) return showAlert('تجاوزت الحد الأقصى، أعد الإرسال');
+            showLoading('⏳ جاري التحقق من الكود...');
+            const r=await apiReq('/Dlogin/verify','POST',{
+                dial:state.phone, verifyCode:code, socialServiceName:'', socialServiceToken:''
+            });
+            hideLoading();
+            if(r.code===200){
+                const tok=r.body.token||r.body.authorization;
+                if(tok){
+                    state.token=tok.replace('Bearer ','');
+                    const bal=await apiReq('/user/loyalty/balance/details','GET',null,{
+                        'authorization':'Bearer '+state.token, 'access-token':r.body.accessToken||''
+                    });
+                    state.balance=bal.code===200 ? (bal.body.balance||0) : 0;
+                    state.step='dashboard'; showAlert('✅ تم تسجيل الدخول بنجاح','success'); render();
+                }else showAlert('⚠️ لم يتم استلام التوكن');
+            }else{
+                const rem=MAX_OTP-state.otpAttempts;
+                showAlert(`❌ الكود غير صحيح. المحاولات المتبقية: ${Math.max(0,rem)}`);
+            }
+        }
+
+        async function completeTasks(){
+            if(!state.token) return showAlert('الرجاء تسجيل الدخول');
+            showLoading('⏳ جاري إنجاز المهام...');
+            const headers={'authorization':'Bearer '+state.token};
+            const t=await apiReq('/user/loyalty/achievements/v2','GET',null,headers);
+            if(t.code!==200){ hideLoading(); return showAlert('❌ فشل جلب المهام'); }
+            const badges=t.body.badges||[]; let completed=0;
+            for(const cat of badges){
+                for(const task of (cat.badges||[])){
+                    if(!task.rewarded){
+                        const a=await apiReq('/loyalty/action/'+task.id,'POST',null,headers);
+                        if(a.code===200) completed++;
+                        await new Promise(r=>setTimeout(r,500));
+                    }
+                }
+            }
+            const bal=await apiReq('/user/loyalty/balance/details','GET',null,headers);
+            const newBalance=bal.code===200 ? (bal.body.balance||0) : 0;
+            updateBalance(newBalance);
+            hideLoading();
+            showAlert(`✅ تم إنجاز ${completed} مهمة بنجاح! الرصيد الجديد: ${newBalance} كوينز`,'success');
+            render();
+        }
+
+        async function redeemUnits(){
+            const pkg=document.getElementById('package').value;
+            if(!pkg) return showAlert('اختر باقة');
+            const packs={
+                '50':'EAND_50_UNITS_ID_9',
+                '100':'EAND_100_UNITS_ID_10',
+                '150':'EAND_150_UNITS_ID_11',
+                '300':'EAND_300_UNITS_ID_12',
+                '500':'EAND_500_UNITS_ID_13',
+                '1000':'EAND_1000_UNITS_ID_15'
+            };
+            const costs={50:100,100:200,150:300,300:600,500:1000,1000:2000};
+            const headers={'authorization':'Bearer '+state.token};
+            showLoading('⏳ جاري استبدال الكوينزات...');
+            const bal=await apiReq('/user/loyalty/balance/details','GET',null,headers);
+            const cur=bal.code===200 ? (bal.body.balance||0) : 0;
+            if(cur<costs[pkg]){ hideLoading(); return showAlert(`❌ الرصيد غير كافٍ (لديك ${cur} تحتاج ${costs[pkg]})`); }
+            const red=await apiReq('/loyalty/redeem/'+packs[pkg],'POST',null,headers);
+            if(red.code===200){
+                const newBal=await apiReq('/user/loyalty/balance/details','GET',null,headers);
+                const newBalance=newBal.code===200 ? (newBal.body.balance||0) : 0;
+                updateBalance(newBalance);
+                hideLoading();
+                showAlert(`✅ تم تبديل الكوينزات بالوحدات بنجاح! الرصيد المتبقي: ${newBalance} كوينز`,'success');
+                render();
+            }else{ hideLoading(); showAlert('❌ فشل السحب'); }
+        }
+
+        function logout(){ state={ step:'phone', phone:'', token:'', balance:0, otpTime:null, otpAttempts:0 }; render(); }
+        function goToPhone(){ state.step='phone'; render(); }
+
+        // تشغيل التطبيق
+        window.addEventListener('load',()=>{
+            setTimeout(()=>{
+                document.getElementById('splash').style.opacity='0';
+                setTimeout(()=>{
+                    document.getElementById('splash').style.display='none';
+                    document.getElementById('mainWrapper').classList.remove('hidden');
+                },600);
+            },3000);
+        });
+
+        render();
+    </script>
+</body>
+</html>
