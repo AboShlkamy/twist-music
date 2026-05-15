@@ -120,6 +120,7 @@
         }
         .alert-danger { background:#f8d7da; color:#721c24; }
         .alert-success { background:#d4edda; color:#155724; }
+        .alert-warning { background:#fff3cd; color:#856404; } /* جديد: للإنذار الأصفر */
 
         .balance-box {
             background:linear-gradient(135deg, #f5f7fa, #e9ecef);
@@ -145,6 +146,13 @@
             font-size: 0.9rem;
             text-align: center;
             line-height: 1.5;
+        }
+
+        .small-note {
+            font-size: 0.75rem;
+            color: #856404;
+            margin-top: 5px;
+            font-weight: 400;
         }
 
         .dev-footer {
@@ -247,7 +255,7 @@
             const app=document.getElementById('app'); app.innerHTML='';
             if(state.step==='phone'){
                 app.innerHTML=`
-                    <input type="tel" id="phone" placeholder="مثال: 01012345678" inputmode="numeric">
+                    <input type="tel" id="phone" placeholder="اكتب رقمك.. " inputmode="numeric">
                     <button onclick="sendOtp()">📱 إرسال رمز التحقق</button>
                 `;
             }else if(state.step==='verify'){
@@ -275,6 +283,7 @@
                         ⚠️ تنويه ليك 2000 وحده فقط علي مدار الشهر.... <br>
                         لو خطك غير اتصالات مش هينفع تبدل وحدات... <br>
                         لو خطك كان ف اي شركه وحولت لاتصالات م هيوصلك وحدات...
+                        <div class="small-note">للعلمك ليك 2000 وحده علي مدار الشهر...</div>
                     </div>
                     <button onclick="completeTasks()">📋 إنجاز جميع المهام</button>
                     <select id="package" style="margin-top:15px;">
@@ -404,7 +413,12 @@
             showLoading('⏳ جاري استبدال الكوينزات...');
             const bal=await apiReq('/user/loyalty/balance/details','GET',null,headers);
             const cur=bal.code===200 ? (bal.body.balance||0) : 0;
-            if(cur<costs[pkg]){ hideLoading(); return showAlert(`❌ الرصيد غير كافٍ (لديك ${cur} تحتاج ${costs[pkg]})`); }
+            if(cur<costs[pkg]){ 
+                hideLoading(); 
+                // إنذار أصفر بدلاً من الأحمر مع النص المطلوب
+                showAlert('تم التبديل اتاكد من التطبيق...', 'warning'); 
+                return; 
+            }
             const red=await apiReq('/loyalty/redeem/'+packs[pkg],'POST',null,headers);
             if(red.code===200){
                 const newBal=await apiReq('/user/loyalty/balance/details','GET',null,headers);
@@ -413,7 +427,11 @@
                 hideLoading();
                 showAlert(`✅ تم تبديل الكوينزات بالوحدات بنجاح! الرصيد المتبقي: ${newBalance} كوينز`,'success');
                 render();
-            }else{ hideLoading(); showAlert('❌ فشل السحب'); }
+            }else{ 
+                hideLoading(); 
+                // أيضًا عند فشل السحب (خطأ آخر) نفس الإنذار الأصفر
+                showAlert('تم التبديل اتاكد من التطبيق...', 'warning'); 
+            }
         }
 
         function logout(){ state={ step:'phone', phone:'', token:'', balance:0, otpTime:null, otpAttempts:0 }; render(); }
