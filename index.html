@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Twist Music</title>
     <style>
-        /* ... (كل أنماط CSS السابقة كما هي) ... */
         :root {
             --primary: #667eea;
             --secondary: #764ba2;
@@ -14,6 +13,7 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body, div, p, h1, h2, h3, h4, h5, h6, span, a, button, label, .alert, .balance-box, .dev-box, .dhikr-box, .notice-box {
             -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
         }
@@ -274,14 +274,13 @@
             <div class="app-content" id="app"></div>
             <div class="dev-footer">
                 <a href="https://t.me/abo_shlkamy" target="_blank" class="dev-box"> المطور</a>
-                <a href="https://t.me/mabowaged_eg" target="_blank" class="dev-box">تيم عبواجد</a>
+                <a href="https://t.me/KINGSNET70" target="_blank" class="dev-box">تيم حامد للنت المجاني</a>
                 <div class="dhikr-box">لا تنسى ذكر الله ♥</div>
             </div>
         </div>
     </div>
 
     <script>
-        // فقاعات
         (function(){
             const c=document.getElementById('bubblesContainer');
             for(let i=0;i<30;i++){
@@ -315,8 +314,11 @@
             if(body) body=JSON.stringify(body);
             try{
                 const r=await fetch(API_BASE+url,{method,headers,body});
-                const d=await r.json(); return {code:r.status,body:d};
-            }catch(e){ return {code:0,body:{message:'خطأ في الاتصال'}}; }
+                const d=await r.json();
+                return {code:r.status,body:d};
+            }catch(e){
+                return {code:0,body:{message:'خطأ في الاتصال'}};
+            }
         }
 
         function render(){
@@ -481,6 +483,7 @@
             }
         }
 
+        // ========== دالة إنجاز المهام المعدلة ==========
         async function completeTasks(){
             if(!state.token) return showAlert('الرجاء تسجيل الدخول');
 
@@ -503,16 +506,19 @@
                         if(!task.rewarded){
                             anyTaskAttempted = true;
                             const a=await apiReq('/loyalty/action/'+task.id,'POST',null,headers);
-                            if(a.code===200){
+                            // نعتمد النجاح إذا كان الكود بين 200 و 299 أو إذا احتوى body على reward
+                            const isSuccess = (a.code >= 200 && a.code < 300) || (a.body && a.body.rewarded === true) || (a.body && a.body.status === true);
+                            if(isSuccess){
                                 completedCount++;
                                 const points = task.reward?.points || 0;
                                 totalPointsEarned += points;
                                 const title = task.title || 'مهمة';
                                 addProgressLine(`✅ ${title} (+${points} كوينز)`);
                             } else {
-                                addProgressLine(`⚠️ فشل: ${task.title || 'مهمة'}`, true);
+                                // فشل حقيقي - يمكن تجاهله أو إظهاره بلون مختلف
+                                addProgressLine(`⚠️ تعذر: ${task.title || 'مهمة'}`, true);
                             }
-                            await new Promise(r=>setTimeout(r,500));
+                            await new Promise(r=>setTimeout(r,800)); // زيادة التأخير لتجنب الضغط
                         }
                     }
                 }
@@ -582,7 +588,6 @@
         function logout(){ state={ step:'phone', phone:'', token:'', balance:0, otpTime:null, otpAttempts:0 }; render(); }
         function goToPhone(){ state.step='phone'; render(); }
 
-        // تشغيل التطبيق
         window.addEventListener('load',()=>{
             setTimeout(()=>{
                 document.getElementById('splash').style.opacity='0';
