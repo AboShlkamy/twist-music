@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>تويست ميوزك</title>
+    <title>Twist Music</title>
     <style>
+        /* ... (كل أنماط CSS السابقة كما هي) ... */
         :root {
             --primary: #667eea;
             --secondary: #764ba2;
@@ -13,7 +14,6 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
         body, div, p, h1, h2, h3, h4, h5, h6, span, a, button, label, .alert, .balance-box, .dev-box, .dhikr-box, .notice-box {
             -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
         }
@@ -120,7 +120,7 @@
         }
         .alert-danger { background:#f8d7da; color:#721c24; }
         .alert-success { background:#d4edda; color:#155724; }
-        .alert-warning { background:#fff3cd; color:#856404; } /* جديد: للإنذار الأصفر */
+        .alert-warning { background:#fff3cd; color:#856404; }
 
         .balance-box {
             background:linear-gradient(135deg, #f5f7fa, #e9ecef);
@@ -172,7 +172,75 @@
             color:#b7950b; font-weight:bold; font-size:0.95rem;
         }
 
-        /* شاشة تحميل عند إنجاز المهام أو السحب */
+        /* صندوق متابعة المهام */
+        .progress-overlay {
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.7);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 300;
+        }
+        .progress-box {
+            background: white;
+            border-radius: 25px;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            max-height: 70vh;
+            overflow-y: auto;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+        }
+        .progress-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        .progress-list {
+            text-align: right;
+            max-height: 300px;
+            overflow-y: auto;
+            background: #f5f5f5;
+            border-radius: 15px;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+        .progress-item {
+            padding: 8px 12px;
+            margin: 5px 0;
+            background: #e8f5e9;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #2e7d32;
+            animation: fadeIn 0.3s ease;
+        }
+        .progress-item.empty {
+            background: #fff3cd;
+            color: #856404;
+        }
+        @keyframes fadeIn {
+            from { opacity:0; transform: translateY(-10px); }
+            to { opacity:1; transform: translateY(0); }
+        }
+        .progress-summary {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #333;
+            margin-top: 10px;
+        }
+        .progress-close-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        /* شاشة تحميل قديمة */
         .loading-overlay {
             position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6);
             display:flex; justify-content:center; align-items:center; z-index:200;
@@ -205,8 +273,8 @@
         <div class="card">
             <div class="app-content" id="app"></div>
             <div class="dev-footer">
-                <a href="https://t.me/abo_shlkamy" target="_blank" class="dev-box">👨‍💻 المطور</a>
-                <a href="https://t.me/mabowaged_eg" target="_blank" class="dev-box">👥 تيم محمد عبواجد</a>
+                <a href="https://t.me/abo_shlkamy" target="_blank" class="dev-box"> المطور</a>
+                <a href="https://t.me/mabowaged_eg" target="_blank" class="dev-box">تيم عبواجد</a>
                 <div class="dhikr-box">لا تنسى ذكر الله ♥</div>
             </div>
         </div>
@@ -312,15 +380,55 @@
             document.getElementById('app').prepend(d); setTimeout(()=>d.remove(),4000);
         }
 
-        function showLoading(text){
-            const overlay = document.createElement('div'); overlay.className='loading-overlay'; overlay.id='loadingOverlay';
-            overlay.innerHTML = `<div class="loading-box"><div class="spinner"></div>${text}</div>`;
-            document.body.appendChild(overlay);
+        // دوال متابعة المهام
+        let progressOverlay = null;
+
+        function showProgress(title) {
+            if (progressOverlay) progressOverlay.remove();
+            progressOverlay = document.createElement('div');
+            progressOverlay.className = 'progress-overlay';
+            progressOverlay.innerHTML = `
+                <div class="progress-box">
+                    <div class="progress-title">${title}</div>
+                    <div class="progress-list" id="progressList"></div>
+                    <div class="progress-summary" id="progressSummary"></div>
+                </div>
+            `;
+            document.body.appendChild(progressOverlay);
         }
 
-        function hideLoading(){
-            const overlay = document.getElementById('loadingOverlay');
-            if(overlay) overlay.remove();
+        function addProgressLine(text, isWarning = false) {
+            const list = document.getElementById('progressList');
+            if (list) {
+                const div = document.createElement('div');
+                div.className = 'progress-item' + (isWarning ? ' empty' : '');
+                div.textContent = text;
+                list.appendChild(div);
+                list.scrollTop = list.scrollHeight;
+            }
+        }
+
+        function finishProgress(message, isSuccess = true) {
+            const summary = document.getElementById('progressSummary');
+            if (summary) {
+                summary.textContent = message;
+                summary.style.color = isSuccess ? '#2e7d32' : '#c62828';
+            }
+            const box = document.querySelector('.progress-box');
+            if (box && !document.getElementById('progressCloseBtn')) {
+                const btn = document.createElement('button');
+                btn.id = 'progressCloseBtn';
+                btn.className = 'progress-close-btn';
+                btn.textContent = '✅ حسناً';
+                btn.onclick = () => {
+                    if (progressOverlay) {
+                        progressOverlay.remove();
+                        progressOverlay = null;
+                    }
+                    render();
+                };
+                box.appendChild(btn);
+            }
         }
 
         function valPhone(p){ return /^01\d{9}$/.test(p)?'2'+p: /^201\d{9}$/.test(p)?p:null; }
@@ -375,26 +483,65 @@
 
         async function completeTasks(){
             if(!state.token) return showAlert('الرجاء تسجيل الدخول');
-            showLoading('⏳ جاري إنجاز المهام...');
+
+            showProgress('⏳ جاري إنجاز المهام...');
             const headers={'authorization':'Bearer '+state.token};
-            const t=await apiReq('/user/loyalty/achievements/v2','GET',null,headers);
-            if(t.code!==200){ hideLoading(); return showAlert('❌ فشل جلب المهام'); }
-            const badges=t.body.badges||[]; let completed=0;
-            for(const cat of badges){
-                for(const task of (cat.badges||[])){
-                    if(!task.rewarded){
-                        const a=await apiReq('/loyalty/action/'+task.id,'POST',null,headers);
-                        if(a.code===200) completed++;
-                        await new Promise(r=>setTimeout(r,500));
+            let completedCount = 0;
+            let totalPointsEarned = 0;
+
+            try {
+                const t=await apiReq('/user/loyalty/achievements/v2','GET',null,headers);
+                if(t.code!==200){
+                    finishProgress('❌ فشل جلب المهام', false);
+                    return;
+                }
+                const badges=t.body.badges||[];
+                let anyTaskAttempted = false;
+
+                for(const cat of badges){
+                    for(const task of (cat.badges||[])){
+                        if(!task.rewarded){
+                            anyTaskAttempted = true;
+                            const a=await apiReq('/loyalty/action/'+task.id,'POST',null,headers);
+                            if(a.code===200){
+                                completedCount++;
+                                const points = task.reward?.points || 0;
+                                totalPointsEarned += points;
+                                const title = task.title || 'مهمة';
+                                addProgressLine(`✅ ${title} (+${points} كوينز)`);
+                            } else {
+                                addProgressLine(`⚠️ فشل: ${task.title || 'مهمة'}`, true);
+                            }
+                            await new Promise(r=>setTimeout(r,500));
+                        }
                     }
                 }
+
+                if (!anyTaskAttempted) {
+                    addProgressLine('📭 لا توجد مهام جديدة متاحة حالياً', true);
+                }
+
+                const bal=await apiReq('/user/loyalty/balance/details','GET',null,headers);
+                const newBalance=bal.code===200 ? (bal.body.balance||0) : state.balance;
+                updateBalance(newBalance);
+
+                const finalMsg = anyTaskAttempted 
+                    ? `🎉 تم إنجاز ${completedCount} مهمة\n💰 إجمالي النقاط: ${totalPointsEarned} كوينز\n💎 الرصيد الحالي: ${newBalance} كوينز`
+                    : `📭 لا توجد مهام جديدة\n💎 الرصيد الحالي: ${newBalance} كوينز`;
+                finishProgress(finalMsg, true);
+            } catch (e) {
+                finishProgress('❌ حدث خطأ أثناء تنفيذ المهام', false);
             }
-            const bal=await apiReq('/user/loyalty/balance/details','GET',null,headers);
-            const newBalance=bal.code===200 ? (bal.body.balance||0) : 0;
-            updateBalance(newBalance);
-            hideLoading();
-            showAlert(`✅ تم إنجاز ${completed} مهمة بنجاح! الرصيد الجديد: ${newBalance} كوينز`,'success');
-            render();
+        }
+
+        function showLoading(text){
+            const overlay = document.createElement('div'); overlay.className='loading-overlay'; overlay.id='loadingOverlay';
+            overlay.innerHTML = `<div class="loading-box"><div class="spinner"></div>${text}</div>`;
+            document.body.appendChild(overlay);
+        }
+        function hideLoading(){
+            const overlay = document.getElementById('loadingOverlay');
+            if(overlay) overlay.remove();
         }
 
         async function redeemUnits(){
@@ -415,7 +562,6 @@
             const cur=bal.code===200 ? (bal.body.balance||0) : 0;
             if(cur<costs[pkg]){ 
                 hideLoading(); 
-                // إنذار أصفر بدلاً من الأحمر مع النص المطلوب
                 showAlert('تم التبديل اتاكد من التطبيق...', 'warning'); 
                 return; 
             }
@@ -429,7 +575,6 @@
                 render();
             }else{ 
                 hideLoading(); 
-                // أيضًا عند فشل السحب (خطأ آخر) نفس الإنذار الأصفر
                 showAlert('تم التبديل اتاكد من التطبيق...', 'warning'); 
             }
         }
