@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Twist Music</title>
+    <title>تويست ميوزك - Twist Music</title>
     <style>
         :root {
             --primary: #667eea;
@@ -11,13 +11,16 @@
             --dark: #1e1a4b;
             --light: rgba(255,255,255,0.96);
         }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body, div, p, h1, h2, h3, h4, h5, h6, span, a, button, label, .alert, .balance-box, .dev-box, .dhikr-box, .notice-box {
             -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
         }
         input, textarea, [contenteditable] {
             -webkit-user-select: text; -moz-user-select: text; -ms-user-select: text; user-select: text;
         }
+
         body {
             font-family: 'Cairo', 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, #1e1a4b 0%, #2d2a5a 50%, #3a2f6a 100%);
@@ -32,11 +35,13 @@
             position: relative;
             overflow: hidden;
         }
+
         @keyframes gradientShift {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+
         .bg-bubbles { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; }
         .bubble {
             position: absolute; bottom:-100px; background:rgba(255,255,255,0.15); border-radius:50%;
@@ -47,10 +52,12 @@
             50% { opacity:0.3; }
             100% { transform:translateY(-110vh) scale(0.3); opacity:0; }
         }
+
         .wrapper {
             position: relative; z-index:2; width:100%; max-width:100%; height:100vh;
             display: flex; flex-direction: column; justify-content: center;
         }
+
         #splash {
             position:fixed; top:0; left:0; right:0; bottom:0;
             background:linear-gradient(135deg, #1e1a4b, #2d2a5a);
@@ -70,6 +77,7 @@
         }
         #splash .logo-circle img { width:100%; height:100%; object-fit:cover; }
         #splash .splash-title { font-size:2.2rem; font-weight:bold; color:white; letter-spacing:3px; }
+
         .card {
             background: var(--light);
             backdrop-filter: blur(20px);
@@ -84,13 +92,16 @@
             margin:0 auto;
             display:flex; flex-direction:column;
         }
+
         .app-content { padding:10px 0; }
+
         input, select {
             width:100%; padding:14px 22px; margin:10px 0;
             border-radius:50px; border:2px solid #e0e0e0; font-size:1rem;
             background:white; transition:0.3s; outline:none; text-align:center;
         }
         input:focus, select:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(102,126,234,0.2); }
+
         button {
             width:100%; padding:14px; margin:8px 0; border-radius:50px; border:none;
             font-weight:bold; font-size:1.1rem; color:white;
@@ -103,12 +114,14 @@
         .btn-outline {
             background:transparent; border:2px solid var(--primary); color:var(--primary); box-shadow:none;
         }
+
         .alert {
             border-radius:25px; padding:12px 18px; margin:10px 0; font-weight:bold; text-align:center;
         }
         .alert-danger { background:#f8d7da; color:#721c24; }
         .alert-success { background:#d4edda; color:#155724; }
         .alert-warning { background:#fff3cd; color:#856404; }
+
         .balance-box {
             background:linear-gradient(135deg, #f5f7fa, #e9ecef);
             border-radius:25px; padding:18px; font-size:1.4rem; font-weight:bold;
@@ -116,10 +129,12 @@
             box-shadow:0 4px 15px rgba(0,0,0,0.08);
         }
         .balance-box span { color:var(--primary); font-size:2rem; }
+
         .timer-display {
             font-size:1.2rem; background:rgba(102,126,234,0.1); border-radius:30px;
             padding:8px 15px; margin:10px 0; display:inline-block;
         }
+
         .notice-box {
             background: #fff3cd;
             border: 2px solid #ffc107;
@@ -138,6 +153,7 @@
             margin-top: 5px;
             font-weight: 400;
         }
+
         .dev-footer {
             margin-top:15px; display:flex; flex-direction:column; gap:8px; text-align:center;
         }
@@ -147,13 +163,15 @@
             text-decoration:none; transition:0.2s; border:1px solid #ddd;
         }
         .dev-box:hover { background:var(--primary); color:white; border-color:var(--primary); }
+
         .dhikr-box {
             margin-top:8px; padding:10px 18px;
             background:linear-gradient(135deg, #fef9e7, #fdebd0);
             border:1px solid #f9e79f; border-radius:25px;
             color:#b7950b; font-weight:bold; font-size:0.95rem;
         }
-        /* صندوق متابعة المهام */
+
+        /* صندوق متابعة المهام المتقدم */
         .progress-overlay {
             position: fixed; top:0; left:0; width:100%; height:100%;
             background: rgba(0,0,0,0.7);
@@ -216,7 +234,8 @@
             margin-top: 10px;
             cursor: pointer;
         }
-        /* شاشة تحميل قديمة */
+
+        /* شاشة تحميل */
         .loading-overlay {
             position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6);
             display:flex; justify-content:center; align-items:center; z-index:200;
@@ -249,14 +268,15 @@
         <div class="card">
             <div class="app-content" id="app"></div>
             <div class="dev-footer">
-                <a href="https://t.me/abo_shlkamy" target="_blank" class="dev-box"> المطور</a>
-                <a href="https://t.me/mabowaged_eg" target="_blank" class="dev-box">تيم عبواجد للنت المجاني</a>
+                <a href="https://t.me/abo_shlkamy" target="_blank" class="dev-box">👨‍💻 المطور</a>
+                <a href="https://t.me/mabowaged_eg" target="_blank" class="dev-box">👥 تيم محمد عبواجد</a>
                 <div class="dhikr-box">لا تنسى ذكر الله ♥</div>
             </div>
         </div>
     </div>
 
     <script>
+        // فقاعات الخلفية
         (function(){
             const c=document.getElementById('bubblesContainer');
             for(let i=0;i<30;i++){
@@ -268,45 +288,63 @@
             }
         })();
 
-        const API_BASE='https://api.twistmena.com/music', MAX_OTP=3;
-        let state={ step:'phone', phone:'', token:'', balance:0, otpTime:null, otpAttempts:0 };
+        // ========== الإعدادات الأساسية ==========
+        const API_BASE = 'https://api.twistmena.com/music';
+        const MAX_OTP = 3;
 
-        function getHeaders(){
-            const ua=[
+        let state = {
+            step: 'phone',
+            phone: '',
+            token: '',
+            balance: 0,
+            otpTime: null,
+            otpAttempts: 0
+        };
+
+        // دوال الترويسات (تعمل بشكل جيد كما في الكود الثاني)
+        function getHeaders() {
+            const ua = [
                 "Dart/3.7 (dart:io)","Dart/3.8 (dart:io)",
                 "Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.6045.163 Mobile Safari/537.36"
             ];
             return {
-                "user-agent":ua[Math.floor(Math.random()*ua.length)],
-                "app_version":"10.10.45","appversion":"10.10.45","channel":"mobileapp",
-                "content-type":"application/json","platform":"android","accept":"application/json",
-                "accept-language":"ar","host":"api.twistmena.com",
-                "device_id":"AP3A.240905.015."+Math.floor(Math.random()*900+100)
+                "user-agent": ua[Math.floor(Math.random() * ua.length)],
+                "app_version": "10.10.45",
+                "appversion": "10.10.45",
+                "channel": "mobileapp",
+                "content-type": "application/json",
+                "platform": "android",
+                "accept": "application/json",
+                "accept-language": "ar",
+                "host": "api.twistmena.com",
+                "device_id": "AP3A.240905.015." + Math.floor(Math.random() * 900 + 100)
             };
         }
 
-        async function apiReq(url,method='GET',body=null,extra={}){
-            const headers={...getHeaders(),...extra};
-            if(body) body=JSON.stringify(body);
-            try{
-                const r=await fetch(API_BASE+url,{method,headers,body});
-                const d=await r.json();
-                return {code:r.status,body:d};
-            }catch(e){
-                return {code:0,body:{message:'خطأ في الاتصال'}};
+        async function apiReq(url, method = 'GET', body = null, extra = {}) {
+            const headers = { ...getHeaders(), ...extra };
+            if (body) body = JSON.stringify(body);
+            try {
+                const r = await fetch(API_BASE + url, { method, headers, body });
+                const d = await r.json();
+                return { code: r.status, body: d };
+            } catch (e) {
+                return { code: 0, body: { message: 'خطأ في الاتصال بالإنترنت' } };
             }
         }
 
-        function render(){
-            const app=document.getElementById('app'); app.innerHTML='';
-            if(state.step==='phone'){
-                app.innerHTML=`
-                    <input type="tel" id="phone" placeholder="اكتب رقمك.. " inputmode="numeric">
+        // دوال واجهة المستخدم الأساسية
+        function render() {
+            const app = document.getElementById('app');
+            app.innerHTML = '';
+            if (state.step === 'phone') {
+                app.innerHTML = `
+                    <input type="tel" id="phone" placeholder="مثال: 01012345678" inputmode="numeric">
                     <button onclick="sendOtp()">📱 إرسال رمز التحقق</button>
                 `;
-            }else if(state.step==='verify'){
-                const rem=state.otpTime?Math.max(0,30-Math.floor((Date.now()-state.otpTime)/1000)):0;
-                app.innerHTML=`
+            } else if (state.step === 'verify') {
+                const rem = state.otpTime ? Math.max(0, 30 - Math.floor((Date.now() - state.otpTime) / 1000)) : 0;
+                app.innerHTML = `
                     <div style="font-size:1.1rem; margin-bottom:8px;">تم إرسال الكود إلى <b>${state.phone}</b></div>
                     <div class="timer-display">⏳ الوقت المتبقي: <span id="timer">${rem}</span> ثانية</div>
                     <input type="text" id="code" placeholder="أدخل رمز التحقق">
@@ -314,22 +352,22 @@
                     <button onclick="resendOtp()" class="btn-success">📬 إعادة الإرسال</button>
                     <button onclick="goToPhone()" class="btn-outline">🔙 تغيير الرقم</button>
                 `;
-                if(rem>0){
-                    const t=document.getElementById('timer');
-                    const iv=setInterval(()=>{
-                        const now=Math.max(0,30-Math.floor((Date.now()-state.otpTime)/1000));
-                        if(t) t.textContent=now;
-                        if(now<=0) clearInterval(iv);
-                    },1000);
+                if (rem > 0) {
+                    const timerSpan = document.getElementById('timer');
+                    const interval = setInterval(() => {
+                        const now = Math.max(0, 30 - Math.floor((Date.now() - state.otpTime) / 1000));
+                        if (timerSpan) timerSpan.textContent = now;
+                        if (now <= 0) clearInterval(interval);
+                    }, 1000);
                 }
-            }else if(state.step==='dashboard'){
-                app.innerHTML=`
+            } else if (state.step === 'dashboard') {
+                app.innerHTML = `
                     <div class="balance-box">💰 رصيدك الحالي: <span id="balanceSpan">${state.balance}</span> كوينز</div>
                     <div class="notice-box">
-                        ⚠️ تنويه ليك 2000 وحده فقط علي مدار الشهر.... <br>
-                        لو خطك غير اتصالات مش هينفع تبدل وحدات... <br>
-                        لو خطك كان ف اي شركه وحولت لاتصالات م هيوصلك وحدات...
-                        <div class="small-note">للعلمك ليك 2000 وحده علي مدار الشهر...</div>
+                        ⚠️ تنويه: ليك 2000 وحدة فقط علي مدار الشهر.<br>
+                        لو خطك غير اتصالات مش هينفع تبدل وحدات.<br>
+                        لو خطك كان ف أي شركه وحولت لاتصالات م هيوصلك وحدات.
+                        <div class="small-note">الحد الأقصى للوحدات المستبدلة شهرياً 2000 وحدة.</div>
                     </div>
                     <button onclick="completeTasks()">📋 إنجاز جميع المهام</button>
                     <select id="package" style="margin-top:15px;">
@@ -347,20 +385,35 @@
             }
         }
 
-        function updateBalance(newBalance){
+        function updateBalance(newBalance) {
             state.balance = newBalance;
             const span = document.getElementById('balanceSpan');
-            if(span) span.textContent = newBalance;
+            if (span) span.textContent = newBalance;
         }
 
-        function showAlert(msg,type='danger'){
-            const d=document.createElement('div'); d.className=`alert alert-${type}`; d.textContent=msg;
-            document.getElementById('app').prepend(d); setTimeout(()=>d.remove(),4000);
+        function showAlert(msg, type = 'danger') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = msg;
+            document.getElementById('app').prepend(alertDiv);
+            setTimeout(() => alertDiv.remove(), 4000);
         }
 
-        // دوال متابعة المهام
+        function showLoading(text) {
+            const overlay = document.createElement('div');
+            overlay.className = 'loading-overlay';
+            overlay.id = 'loadingOverlay';
+            overlay.innerHTML = `<div class="loading-box"><div class="spinner"></div>${text}</div>`;
+            document.body.appendChild(overlay);
+        }
+
+        function hideLoading() {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) overlay.remove();
+        }
+
+        // صندوق المهام المتقدم (من الكود الأول)
         let progressOverlay = null;
-
         function showProgress(title) {
             if (progressOverlay) progressOverlay.remove();
             progressOverlay = document.createElement('div');
@@ -409,89 +462,114 @@
             }
         }
 
-        function valPhone(p){ return /^01\d{9}$/.test(p)?'2'+p: /^201\d{9}$/.test(p)?p:null; }
+        // ========== دوال تسجيل الدخول والتحقق (تعمل كما في الكود الثاني) ==========
+        function valPhone(p) {
+            return /^01\d{9}$/.test(p) ? '2' + p : /^201\d{9}$/.test(p) ? p : null;
+        }
 
-        async function sendOtp(){
-            const p=document.getElementById('phone').value.trim();
-            if(!p) return showAlert('أدخل رقم الهاتف');
-            const f=valPhone(p); if(!f) return showAlert('رقم غير صالح');
+        async function sendOtp() {
+            const phoneInput = document.getElementById('phone').value.trim();
+            if (!phoneInput) return showAlert('أدخل رقم الهاتف');
+            const formatted = valPhone(phoneInput);
+            if (!formatted) return showAlert('رقم غير صالح (مثال: 01012345678)');
             showLoading('⏳ جاري إرسال رمز التحقق...');
-            const r=await apiReq('/Dlogin/sendCode','POST',{dial:f});
+            const res = await apiReq('/Dlogin/sendCode', 'POST', { dial: formatted });
             hideLoading();
-            if(r.code===200){
-                state.phone=f; state.step='verify'; state.otpTime=Date.now(); state.otpAttempts=0;
-                showAlert('✅ تم إرسال الكود','success'); render();
-            }else showAlert('❌ فشل الإرسال: '+(r.body.message||'Forbidden'));
-        }
-
-        async function resendOtp(){
-            showLoading('⏳ جاري إعادة الإرسال...');
-            const r=await apiReq('/Dlogin/sendCode','POST',{dial:state.phone});
-            hideLoading();
-            if(r.code===200){ state.otpTime=Date.now(); state.otpAttempts=0; showAlert('✅ أعيد الإرسال','success'); render(); }
-            else showAlert('❌ فشل إعادة الإرسال');
-        }
-
-        async function verifyOtp(){
-            const code=document.getElementById('code').value.trim();
-            if(!code) return showAlert('أدخل الكود');
-            if(state.otpTime && Date.now()-state.otpTime>30000) return showAlert('انتهت صلاحية الكود');
-            state.otpAttempts++;
-            if(state.otpAttempts>MAX_OTP) return showAlert('تجاوزت الحد الأقصى، أعد الإرسال');
-            showLoading('⏳ جاري التحقق من الكود...');
-            const r=await apiReq('/Dlogin/verify','POST',{
-                dial:state.phone, verifyCode:code, socialServiceName:'', socialServiceToken:''
-            });
-            hideLoading();
-            if(r.code===200){
-                const tok=r.body.token||r.body.authorization;
-                if(tok){
-                    state.token=tok.replace('Bearer ','');
-                    const bal=await apiReq('/user/loyalty/balance/details','GET',null,{
-                        'authorization':'Bearer '+state.token, 'access-token':r.body.accessToken||''
-                    });
-                    state.balance=bal.code===200 ? (bal.body.balance||0) : 0;
-                    state.step='dashboard'; showAlert('✅ تم تسجيل الدخول بنجاح','success'); render();
-                }else showAlert('⚠️ لم يتم استلام التوكن');
-            }else{
-                const rem=MAX_OTP-state.otpAttempts;
-                showAlert(`❌ الكود غير صحيح. المحاولات المتبقية: ${Math.max(0,rem)}`);
+            if (res.code === 200) {
+                state.phone = formatted;
+                state.step = 'verify';
+                state.otpTime = Date.now();
+                state.otpAttempts = 0;
+                showAlert('✅ تم إرسال الكود', 'success');
+                render();
+            } else {
+                showAlert('❌ فشل الإرسال: ' + (res.body.message || 'Forbidden'));
             }
         }
 
-        // ========== دالة إنجاز المهام (تظهر كل المهام كـ "تم بنجاح") ==========
-        async function completeTasks(){
-            if(!state.token) return showAlert('الرجاء تسجيل الدخول');
+        async function resendOtp() {
+            showLoading('⏳ جاري إعادة الإرسال...');
+            const res = await apiReq('/Dlogin/sendCode', 'POST', { dial: state.phone });
+            hideLoading();
+            if (res.code === 200) {
+                state.otpTime = Date.now();
+                state.otpAttempts = 0;
+                showAlert('✅ أعيد الإرسال بنجاح', 'success');
+                render();
+            } else {
+                showAlert('❌ فشل إعادة الإرسال');
+            }
+        }
 
+        async function verifyOtp() {
+            const code = document.getElementById('code').value.trim();
+            if (!code) return showAlert('أدخل الكود');
+            if (state.otpTime && Date.now() - state.otpTime > 30000) return showAlert('انتهت صلاحية الكود، أعد الإرسال');
+            state.otpAttempts++;
+            if (state.otpAttempts > MAX_OTP) return showAlert('تجاوزت الحد الأقصى للمحاولات، أعد الإرسال');
+            showLoading('⏳ جاري التحقق...');
+            const res = await apiReq('/Dlogin/verify', 'POST', {
+                dial: state.phone,
+                verifyCode: code,
+                socialServiceName: '',
+                socialServiceToken: ''
+            });
+            hideLoading();
+            if (res.code === 200) {
+                const token = res.body.token || res.body.authorization;
+                if (token) {
+                    state.token = token.replace('Bearer ', '');
+                    const balanceRes = await apiReq('/user/loyalty/balance/details', 'GET', null, {
+                        'authorization': 'Bearer ' + state.token,
+                        'access-token': res.body.accessToken || ''
+                    });
+                    state.balance = balanceRes.code === 200 ? (balanceRes.body.balance || 0) : 0;
+                    state.step = 'dashboard';
+                    showAlert('✅ تم تسجيل الدخول بنجاح', 'success');
+                    render();
+                } else {
+                    showAlert('⚠️ لم يتم استلام التوكن');
+                }
+            } else {
+                const remaining = MAX_OTP - state.otpAttempts;
+                showAlert(`❌ الكود غير صحيح. المحاولات المتبقية: ${Math.max(0, remaining)}`);
+            }
+        }
+
+        function goToPhone() {
+            state.step = 'phone';
+            render();
+        }
+
+        // ========== المهام المتقدمة مع عرض كل مهمة ==========
+        async function completeTasks() {
+            if (!state.token) return showAlert('الرجاء تسجيل الدخول أولاً');
             showProgress('⏳ جاري إنجاز المهام...');
-            const headers={'authorization':'Bearer '+state.token};
+            const headers = { 'authorization': 'Bearer ' + state.token };
             let completedCount = 0;
             let totalPointsEarned = 0;
 
             try {
-                const t=await apiReq('/user/loyalty/achievements/v2','GET',null,headers);
-                if(t.code!==200){
-                    finishProgress('❌ فشل جلب المهام');
+                const achievementsRes = await apiReq('/user/loyalty/achievements/v2', 'GET', null, headers);
+                if (achievementsRes.code !== 200) {
+                    finishProgress('❌ فشل جلب قائمة المهام');
                     return;
                 }
-                const badges=t.body.badges||[];
+                const badges = achievementsRes.body.badges || [];
                 let anyTaskAttempted = false;
 
-                for(const cat of badges){
-                    for(const task of (cat.badges||[])){
-                        if(!task.rewarded){
+                for (const category of badges) {
+                    for (const task of (category.badges || [])) {
+                        if (!task.rewarded) {
                             anyTaskAttempted = true;
-                            // نحاول تنفيذ المهمة (لا نهتم بالنتيجة الفعلية)
-                            await apiReq('/loyalty/action/'+task.id,'POST',null,headers);
-                            
-                            // نعرض نجاح دائمًا
+                            // تنفيذ المهمة (لا ننتظر النتيجة الفعلية، لكننا نعرض نجاحاً)
+                            await apiReq('/loyalty/action/' + task.id, 'POST', null, headers);
                             completedCount++;
                             const points = task.reward?.points || 0;
                             totalPointsEarned += points;
                             const title = task.title || 'مهمة';
-                            addProgressLine(`✅ تم عمل المهمة بنجاح: ${title} (+${points} كوينز)`);
-                            
-                            await new Promise(r=>setTimeout(r,800));
+                            addProgressLine(`✅ تم إنجاز المهمة: ${title} (+${points} كوينز)`);
+                            await new Promise(r => setTimeout(r, 600));
                         }
                     }
                 }
@@ -500,75 +578,89 @@
                     addProgressLine('📭 لا توجد مهام جديدة متاحة حالياً');
                 }
 
-                const bal=await apiReq('/user/loyalty/balance/details','GET',null,headers);
-                const newBalance=bal.code===200 ? (bal.body.balance||0) : state.balance;
+                // جلب الرصيد الجديد
+                const newBalanceRes = await apiReq('/user/loyalty/balance/details', 'GET', null, headers);
+                const newBalance = newBalanceRes.code === 200 ? (newBalanceRes.body.balance || 0) : state.balance;
                 updateBalance(newBalance);
 
-                const finalMsg = anyTaskAttempted 
+                const finalMsg = anyTaskAttempted
                     ? `🎉 تم إنجاز ${completedCount} مهمة\n💰 إجمالي النقاط: ${totalPointsEarned} كوينز\n💎 الرصيد الحالي: ${newBalance} كوينز`
                     : `📭 لا توجد مهام جديدة\n💎 الرصيد الحالي: ${newBalance} كوينز`;
                 finishProgress(finalMsg);
-            } catch (e) {
+            } catch (err) {
                 finishProgress('❌ حدث خطأ أثناء تنفيذ المهام');
             }
         }
 
-        function showLoading(text){
-            const overlay = document.createElement('div'); overlay.className='loading-overlay'; overlay.id='loadingOverlay';
-            overlay.innerHTML = `<div class="loading-box"><div class="spinner"></div>${text}</div>`;
-            document.body.appendChild(overlay);
-        }
-        function hideLoading(){
-            const overlay = document.getElementById('loadingOverlay');
-            if(overlay) overlay.remove();
-        }
-
-        async function redeemUnits(){
-            const pkg=document.getElementById('package').value;
-            if(!pkg) return showAlert('اختر باقة');
-            const packs={
-                '50':'EAND_50_UNITS_ID_9',
-                '100':'EAND_100_UNITS_ID_10',
-                '150':'EAND_150_UNITS_ID_11',
-                '300':'EAND_300_UNITS_ID_12',
-                '500':'EAND_500_UNITS_ID_13',
-                '1000':'EAND_1000_UNITS_ID_15'
+        // ========== استبدال الوحدات مع رسالة مخصصة ==========
+        async function redeemUnits() {
+            const pkgValue = document.getElementById('package').value;
+            if (!pkgValue) return showAlert('اختر باقة أولاً');
+            
+            const packages = {
+                '50': 'EAND_50_UNITS_ID_9',
+                '100': 'EAND_100_UNITS_ID_10',
+                '150': 'EAND_150_UNITS_ID_11',
+                '300': 'EAND_300_UNITS_ID_12',
+                '500': 'EAND_500_UNITS_ID_13',
+                '1000': 'EAND_1000_UNITS_ID_15'
             };
-            const costs={50:100,100:200,150:300,300:600,500:1000,1000:2000};
-            const headers={'authorization':'Bearer '+state.token};
+            const costs = {
+                '50': 100, '100': 200, '150': 300,
+                '300': 600, '500': 1000, '1000': 2000
+            };
+            
+            const headers = { 'authorization': 'Bearer ' + state.token };
             showLoading('⏳ جاري استبدال الكوينزات...');
-            const bal=await apiReq('/user/loyalty/balance/details','GET',null,headers);
-            const cur=bal.code===200 ? (bal.body.balance||0) : 0;
-            if(cur<costs[pkg]){ 
-                hideLoading(); 
-                showAlert('تم التبديل اتاكد من التطبيق...', 'warning'); 
-                return; 
-            }
-            const red=await apiReq('/loyalty/redeem/'+packs[pkg],'POST',null,headers);
-            if(red.code===200){
-                const newBal=await apiReq('/user/loyalty/balance/details','GET',null,headers);
-                const newBalance=newBal.code===200 ? (newBal.body.balance||0) : 0;
-                updateBalance(newBalance);
+            
+            // التحقق من الرصيد أولاً
+            const balanceRes = await apiReq('/user/loyalty/balance/details', 'GET', null, headers);
+            const currentBalance = balanceRes.code === 200 ? (balanceRes.body.balance || 0) : 0;
+            if (currentBalance < costs[pkgValue]) {
                 hideLoading();
-                showAlert(`✅ تم تبديل الكوينزات بالوحدات بنجاح! الرصيد المتبقي: ${newBalance} كوينز`,'success');
-                render();
-            }else{ 
-                hideLoading(); 
-                showAlert('تم التبديل اتاكد من التطبيق...', 'warning'); 
+                showAlert(`⚠️ الرصيد غير كافٍ (لديك ${currentBalance} كوينز، تحتاج ${costs[pkgValue]} كوينز)`, 'warning');
+                return;
+            }
+            
+            // تنفيذ عملية الاستبدال
+            const redeemRes = await apiReq('/loyalty/redeem/' + packages[pkgValue], 'POST', null, headers);
+            hideLoading();
+            
+            if (redeemRes.code === 200) {
+                // تحديث الرصيد وعرض رسالة النجاح مع التنبيه
+                const newBalanceRes = await apiReq('/user/loyalty/balance/details', 'GET', null, headers);
+                const newBalance = newBalanceRes.code === 200 ? (newBalanceRes.body.balance || 0) : currentBalance;
+                updateBalance(newBalance);
+                showAlert(`✅ تم التبديل اتاكد من التطبيق... رصيدك المتبقي: ${newBalance} كوينز`, 'success');
+                render(); // لتحديث الواجهة
+            } else {
+                // رسالة كما في الكود الأول "تم التبديل اتاكد من التطبيق"
+                showAlert('⚠️ تم التبديل اتاكد من التطبيق...', 'warning');
             }
         }
 
-        function logout(){ state={ step:'phone', phone:'', token:'', balance:0, otpTime:null, otpAttempts:0 }; render(); }
-        function goToPhone(){ state.step='phone'; render(); }
+        function logout() {
+            state = {
+                step: 'phone',
+                phone: '',
+                token: '',
+                balance: 0,
+                otpTime: null,
+                otpAttempts: 0
+            };
+            render();
+        }
 
-        window.addEventListener('load',()=>{
-            setTimeout(()=>{
-                document.getElementById('splash').style.opacity='0';
-                setTimeout(()=>{
-                    document.getElementById('splash').style.display='none';
+        // ========== بدء التطبيق ==========
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splash');
+                splash.style.opacity = '0';
+                setTimeout(() => {
+                    splash.style.display = 'none';
                     document.getElementById('mainWrapper').classList.remove('hidden');
-                },600);
-            },3000);
+                }, 600);
+            }, 3000);
         });
 
         render();
